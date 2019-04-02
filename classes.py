@@ -121,10 +121,10 @@ class ConnectFour:
         print('-------')
 
 
-    def check_win(self):
+    def check_win_vertical(self):
         """
         Checks if there are 4 chips in a row
-        (Horizontally/Vertically/Diagonally)
+        Vertically
         """
         chips = ''
         if self.number_of_turns % 2 == 0:
@@ -136,8 +136,6 @@ class ConnectFour:
         #Vertical win check
         index = 0
         for index, ky in enumerate(self.board):
-            print(list(self.board.keys()))
-            print(index)
             keyLetter = list(self.board.keys())[index]
             counter = 0
             if len(self.board[keyLetter]) >= 4:
@@ -168,6 +166,17 @@ class ConnectFour:
             # Next chip different color -> counter = 1
 
 
+    def check_win_horizontal(self):
+        """
+        Checks if a win occurred
+        Horizontally
+        """
+        list_of_rows = []
+        index = 0
+        row_making = []
+        for index, x in enumerate(self.board):
+            print(x)
+            row_making.append()
 
 class ColumnFullError(Exception):
     pass
