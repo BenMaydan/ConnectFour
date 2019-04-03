@@ -134,7 +134,6 @@ class ConnectFour:
         name = player.name
 
         #Vertical win check
-        index = 0
         for index, ky in enumerate(self.board):
             keyLetter = list(self.board.keys())[index]
             counter = 0
@@ -158,8 +157,6 @@ class ConnectFour:
                             name = self.listPlayers[1].name
                             print(str(name[0].upper()) + str(name[1:]) + ' won!')
                         sys.exit()
-            else:
-                index += 1
             #Do a counter for how many chips in a row
             #1 chip -> counter = 1
             #2 chips same color as prev -> counter = 2
@@ -172,11 +169,42 @@ class ConnectFour:
         Horizontally
         """
         list_of_rows = []
-        index = 0
-        row_making = []
-        for index, x in enumerate(self.board):
-            print(x)
-            row_making.append()
+        indexOne = 0
+        for index, letter in enumerate(self.board):
+            row_making = []
+            for chip in self.board[letter]:
+                try:
+                    row_making.append(self.board[letter][indexOne])
+                    indexOne += 1
+                except:
+                    pass
+            list_of_rows.append(row_making)
+        print(list_of_rows)
+
+
+        for row in list_of_rows:
+            counter = 0
+            if len(row) >= 4:
+                chip_color = row[-1].color
+                for chip in row:
+                    #If the current chip color is equal to the previous chips color, counter goes up
+                    if chip.color == chip_color:
+                        counter += 1
+                    #If the current chip color is not equal to previous chip color, counter gets reset
+                    elif chip.color != chip_color:
+                        chip_color = chip.color
+                        counter = 1
+                    #If there is 4 chips of same color in a row, someone wins
+                    if counter == 4:
+                        #Determines which player won
+                        if chip_color == self.listPlayers[0].color:
+                            name = self.listPlayers[0].name
+                            print(str(name[0].upper()) + str(name[1:]) + ' won!')
+                        else:
+                            name = self.listPlayers[1].name
+                            print(str(name[0].upper()) + str(name[1:]) + ' won!')
+                        sys.exit()
+
 
 class ColumnFullError(Exception):
     pass

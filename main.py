@@ -13,7 +13,6 @@ somebody_did_not_win = False
 while somebody_did_not_win == False:
 
     try:
-        #clear_terminal()
         game.show_state()
         game.play_turn()
         game.check_win_vertical()
