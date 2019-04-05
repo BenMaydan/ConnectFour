@@ -98,9 +98,27 @@ class ConnectFour:
             self.play_turn()
         else:
             chip = player.play_chip()
-            row = len(self.board_list[self.letters_to_index[column.upper()]])
+            if len(self.board[column.upper()]) == 0:
+                row_number = self.rows
+            else:
+                print(len(self.board_list[self.letters_to_index[column.upper()]]))
+                row_number = self.rows - len(self.board[column.upper()])
+                # [
+                #  A  B  C  D  E  F  G
+                # [r, b, r, b, r]
+                # []
+                # []
+                # []
+                # []
+                # []
+                # []
+                # ]
+            #print(row)
 
-            self.board_list[row].append(chip)
+            self.board_list[row_number].insert(self.letters_to_index[column.upper()], chip)
+            for x in self.board_list:
+                print(x)
+
             self.board[column.upper()].append(chip)
             self.number_of_turns += 1
 
@@ -110,7 +128,6 @@ class ConnectFour:
         Shows the state of the board/
         prints board in terminal
         """
-        #clear_terminal()
         header = ''
         for key in self.board.keys():
             header += key
@@ -179,26 +196,7 @@ class ConnectFour:
         Checks if a win occurred
         Horizontally
         """
-        list_of_rows = []
-        indexOne = 0
-        for x in range(len(self.board)):
-            for index, letter in enumerate(self.board):
-                row_making = []
-                #print("Board[letter]", self.board[letter])
-                for chip in self.board[letter]:
-                    #if letter == list(self.board.keys())[-1]:
-                    #    indexOne += 1
-                    #else:
-                    #print("Chip: '" + str(chip) + "'")
-                    #print("Append: '" + str(self.board[letter][indexOne]) + "'")
-                    row_making.append(self.board[letter][indexOne])
-                #print(row_making)
-            list_of_rows.append(row_making)
-        for x in self.board_list:
-            print(x)
-
-
-        for row in list_of_rows:
+        for row in self.board:
             counter = 0
             if len(row) >= 4:
                 chip_color = row[-1].color
