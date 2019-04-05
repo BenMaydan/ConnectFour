@@ -66,10 +66,14 @@ class ConnectFour:
         else:
             player = self.player_2
 
-        name = player.name
+        #Uses substringing to capitalize first letter of name +
+        #Also capitalizes first letter of player color
+        player_name = str(player.name[0].upper() + str(player.name[1:]))
+        player_color = str(player.color[0].upper() + player.color[1:])
+
         try:
             print('\n\n')
-            column = input(str(name[0].upper()) + str(name[1:]) + ', please choose a column: ')
+            column = input(player_name + '/' + player_color + ', please choose a column: ')
             self.board[column.upper()] = self.board[column.upper()]
             if len(self.board[column.upper()]) == self.rows:
                 raise ColumnFullError
@@ -122,7 +126,7 @@ class ConnectFour:
             row_to_show = ''
             for key in self.board.keys():
                 if len(self.board[key]) >= self.rows - i:
-                    #print(self.board[key], self.rows - i)
+                    #Defines what a chip is and adds it the the row to show which it will print later
                     chip = self.board[key][self.rows - i - 1]
                     row_to_show += chip.color[0] + spacingBetweenLetters#Shows the first letter of the color / shows 'r' or 'b' and some amount of spaces after
                 else:
@@ -147,6 +151,8 @@ class ConnectFour:
         for index, ky in enumerate(self.board):
             keyLetter = list(self.board.keys())[index]
             counter = 0
+            #If the len of the column is less than 4, it won't bother
+            #Even checking if there are 4 colors in a row
             if len(self.board[keyLetter]) >= 4:
                 chip_color = self.board[keyLetter][-1].color
                 for chip in self.board[keyLetter]:
@@ -182,12 +188,15 @@ class ConnectFour:
         """
         for row in self.board_list:
             counter = 0
+            #If the len of the row is less than 4, it won't bother
+            #Even checking if there are 4 colors in a row
             if len(row) >= 4:
                 if row[-1] == None:
                     chip_color = None
                 else:
                     chip_color = row[-1].color
                 for chip in row:
+                    #Moves on to next iteration if there is no chip
                     if chip == None:
                         continue
                     #If the current chip color is equal to the previous chips color, counter goes up
