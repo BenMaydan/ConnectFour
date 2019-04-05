@@ -55,16 +55,23 @@ class ConnectFour:
         self.rows = rows
         self.columns = cols
         self.number_of_turns = 0
-        self.listPlayers = []
-        self.listPlayers.append(self.player_1)
-        self.listPlayers.append(self.player_2)
+        self.listPlayers = [player_1, player_2]
 
         self.ColumFullError = 'Cannot put chip in a full column!'
 
         self.board = {}
+        self.letters_to_index = {}
+        index = 0
         for i in range(self.columns):
             label = string.ascii_uppercase[i]
             self.board[label] = []
+            self.letters_to_index[label] = index
+            index += 1
+        #for y in range(self.)
+
+        self.board_list = [[]]
+        for x in range(self.rows):
+            self.board_list.append([])
 
 
     def play_turn(self):
@@ -87,11 +94,15 @@ class ConnectFour:
             print('That is not a valid column!')
             self.play_turn()
         except ColumnFullError:
-           print('That column is full!')
-           self.play_turn()
+            print('That column is full!')
+            self.play_turn()
         else:
-           self.board[column.upper()].append(player.play_chip())
-           self.number_of_turns += 1
+            chip = player.play_chip()
+            row = len(self.board_list[self.letters_to_index[column.upper()]])
+
+            self.board_list[row].append(chip)
+            self.board[column.upper()].append(chip)
+            self.number_of_turns += 1
 
 
     def show_state(self):
@@ -170,16 +181,21 @@ class ConnectFour:
         """
         list_of_rows = []
         indexOne = 0
-        for index, letter in enumerate(self.board):
-            row_making = []
-            for chip in self.board[letter]:
-                try:
+        for x in range(len(self.board)):
+            for index, letter in enumerate(self.board):
+                row_making = []
+                #print("Board[letter]", self.board[letter])
+                for chip in self.board[letter]:
+                    #if letter == list(self.board.keys())[-1]:
+                    #    indexOne += 1
+                    #else:
+                    #print("Chip: '" + str(chip) + "'")
+                    #print("Append: '" + str(self.board[letter][indexOne]) + "'")
                     row_making.append(self.board[letter][indexOne])
-                    indexOne += 1
-                except:
-                    pass
+                #print(row_making)
             list_of_rows.append(row_making)
-        print(list_of_rows)
+        for x in self.board_list:
+            print(x)
 
 
         for row in list_of_rows:
