@@ -68,7 +68,7 @@ class ConnectFour:
 
         name = player.name
         try:
-            print('\n')
+            print('\n\n')
             column = input(str(name[0].upper()) + str(name[1:]) + ', please choose a column: ')
             self.board[column.upper()] = self.board[column.upper()]
             if len(self.board[column.upper()]) == self.rows:
@@ -126,7 +126,7 @@ class ConnectFour:
                     chip = self.board[key][self.rows - i - 1]
                     row_to_show += chip.color[0] + spacingBetweenLetters#Shows the first letter of the color / shows 'r' or 'b' and some amount of spaces after
                 else:
-                    row_to_show += ' '
+                    row_to_show += '-' + spacingBetweenLetters
             print(row_to_show)
         print(dashes)
 
