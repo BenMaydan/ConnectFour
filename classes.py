@@ -116,8 +116,8 @@ class ConnectFour:
             #print(row)
 
             self.board_list[row_number].insert(self.letters_to_index[column.upper()], chip)
-            for x in self.board_list:
-                print(x)
+            #for x in self.board_list:
+                #print(x)
 
             self.board[column.upper()].append(chip)
             self.number_of_turns += 1
@@ -196,7 +196,7 @@ class ConnectFour:
         Checks if a win occurred
         Horizontally
         """
-        for row in self.board:
+        for row in self.board_list:
             counter = 0
             if len(row) >= 4:
                 chip_color = row[-1].color
