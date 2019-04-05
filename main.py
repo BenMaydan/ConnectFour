@@ -1,7 +1,7 @@
 """
 Main game loop
 """
-from classes import Player, ConnectFour, clear_terminal
+from classes import Player, ConnectFour
 import sys
 
 
@@ -13,7 +13,7 @@ somebody_did_not_win = False
 while somebody_did_not_win == False:
 
     try:
-        game.show_state()
+        game.show_state('')
         game.play_turn()
         game.check_win_vertical()
         game.check_win_horizontal()

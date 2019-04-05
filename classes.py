@@ -1,16 +1,5 @@
 import string
-import os
-import subprocess
 import sys
-
-
-def clear_terminal():
-    if os.name in ('nt','dos'):
-        subprocess.call("cls")
-    elif os.name in ('linux','osx','posix'):
-        subprocess.call("clear")
-    else:
-        print("\n") * 120
 
 
 class Chip:
@@ -34,16 +23,6 @@ class Player:
         return Chip(self.color)
 
 
-class Display:
-
-    def __init__(self):
-        pass
-
-
-    def draw(self):
-        pass
-
-
 class ConnectFour:
     """
     Column class
@@ -62,16 +41,23 @@ class ConnectFour:
         self.board = {}
         self.letters_to_index = {}
         index = 0
+        #Generates correct number of columns
         for i in range(self.columns):
             label = string.ascii_uppercase[i]
             self.board[label] = []
             self.letters_to_index[label] = index
             index += 1
-        #for y in range(self.)
 
         self.board_list = [[]]
+        #Generates correct number of nones
         for x in range(self.rows):
             self.board_list.append([])
+        #Puts correct number on None's in rows
+        for row in self.board_list:
+            for y in range(self.columns):
+                self.board_list[y].append(None)
+        #for x in self.board_list:
+        #    print(x)
 
 
     def play_turn(self):
@@ -101,39 +87,35 @@ class ConnectFour:
             if len(self.board[column.upper()]) == 0:
                 row_number = self.rows
             else:
-                print(len(self.board_list[self.letters_to_index[column.upper()]]))
                 row_number = self.rows - len(self.board[column.upper()])
-                # [
-                #  A  B  C  D  E  F  G
-                # [r, b, r, b, r]
-                # []
-                # []
-                # []
-                # []
-                # []
-                # []
-                # ]
-            #print(row)
-
+            #print("Insert into list at index:", self.letters_to_index[column.upper()])
+            self.board_list[row_number].pop(self.letters_to_index[column.upper()])
             self.board_list[row_number].insert(self.letters_to_index[column.upper()], chip)
             #for x in self.board_list:
-                #print(x)
+            #    print(x)
 
             self.board[column.upper()].append(chip)
             self.number_of_turns += 1
 
 
-    def show_state(self):
+    def show_state(self, spacingBetweenLetters):
         """
         Shows the state of the board/
         prints board in terminal
         """
         header = ''
         for key in self.board.keys():
-            header += key
-        print('-------')
+            header += key + spacingBetweenLetters
+
+        numDashes = len(header)
+        dashes = ''
+        for n in range(numDashes):
+            dashes += '-'
+
+        #Actually prints dashes and empty header (for now)
+        print(dashes)
         print(header)
-        print('-------')
+        print(dashes)
 
         #Display column contents
         for i in range(self.rows):
@@ -142,11 +124,11 @@ class ConnectFour:
                 if len(self.board[key]) >= self.rows - i:
                     #print(self.board[key], self.rows - i)
                     chip = self.board[key][self.rows - i - 1]
-                    row_to_show += chip.color[0] #Shows the first letter of the color / shows 'r' or 'b'
+                    row_to_show += chip.color[0] + spacingBetweenLetters#Shows the first letter of the color / shows 'r' or 'b' and some amount of spaces after
                 else:
                     row_to_show += ' '
             print(row_to_show)
-        print('-------')
+        print(dashes)
 
 
     def check_win_vertical(self):
@@ -168,6 +150,8 @@ class ConnectFour:
             if len(self.board[keyLetter]) >= 4:
                 chip_color = self.board[keyLetter][-1].color
                 for chip in self.board[keyLetter]:
+                    if chip == None:
+                        pass
                     #If the current chip color is equal to the previous chips color, counter goes up
                     if chip.color == chip_color:
                         counter += 1
@@ -199,8 +183,13 @@ class ConnectFour:
         for row in self.board_list:
             counter = 0
             if len(row) >= 4:
-                chip_color = row[-1].color
+                if row[-1] == None:
+                    chip_color = None
+                else:
+                    chip_color = row[-1].color
                 for chip in row:
+                    if chip == None:
+                        continue
                     #If the current chip color is equal to the previous chips color, counter goes up
                     if chip.color == chip_color:
                         counter += 1
