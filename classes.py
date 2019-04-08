@@ -38,16 +38,38 @@ class ConnectFour:
         self.listPlayers = [player_1, player_2]
         self.ColumFullError = 'Cannot put chip in a full column!'
 
-        #self.RowError = RowError()
-        #self.ColumnError = ColumnError()
-        #self.RowLengthErrorMSG = 'Invalid Row Length. Try a Number Greater Than 0!'
-        #self.ColumnLengthErrorMSG = 'Invalid Row Length. Try a Number Greater Than 0!'
+        self.RowLengthError = RowLengthError()
+        self.ColumnLengthError = ColumnLengthError()
+        self.RowTypeError = RowTypeError()
+        self.ColumnTypeError = ColumnTypeError()
+        self.RowLengthErrorMSG = 'Invalid Row Length. Try a Number Greater Than 0!'
+        self.ColumnLengthErrorMSG = 'Invalid Column Length. Try a Number Greater Than 0!'
+        self.RowTypeErrorMSG = 'Invalid type for "row" parameter. Use an integer!'
+        self.ColumnTypeErrorMSG = 'Invalid type for "column" parameter. Use an integer!'
 
-        #if self.rows <= 0:
-        #    print('Invalid row length!')
-        #if type(self.rows) != int:
-        #    raise
-        #if self.columns <= 0:
+        try:
+            if type(self.rows) != int:
+                raise RowTypeError
+            if type(self.columns) != int:
+                raise ColumnTypeError
+            if self.rows <= 0:
+                raise RowLengthError
+            if self.columns <= 0:
+                raise ColumnLengthError
+        except RowLengthError:
+            print(self.RowLengthErrorMSG)
+            sys.exit()
+        except ColumnLengthError:
+            print(self.ColumnLengthErrorMSG)
+            sys.exit()
+        except RowTypeError:
+            print(self.RowTypeErrorMSG)
+            sys.exit()
+        except ColumnTypeError:
+            print(self.ColumnTypeErrorMSG)
+            sys.exit()
+        else:
+            pass
 
 
         self.board = {}
@@ -119,6 +141,7 @@ class ConnectFour:
         Shows the state of the board/
         prints board in terminal
         """
+
         header = ''
         for key in self.board.keys():
             header += key + spacingBetweenLetters
@@ -147,7 +170,7 @@ class ConnectFour:
         print(dashes)
 
 
-    def check_win_vertical(self):
+    def check_win_vertical(self, spacingBetweenLetters):
         """
         Checks if there are 4 chips in a row
         Vertically
@@ -184,13 +207,13 @@ class ConnectFour:
                         if chip_color == self.listPlayers[0].color:
                             name = self.listPlayers[0].name
                             print(str(name[0].upper()) + str(name[1:]) + ' won!')
-                            #print("\nThe winning state of the board:")
-                            #self.show_state(main.spacingBetweenLetters)
+                            print("\nThe winning state of the board:")
+                            self.show_state(spacingBetweenLetters)
                         else:
                             name = self.listPlayers[1].name
                             print(str(name[0].upper()) + str(name[1:]) + ' won!')
-                            #print("\nThe winning state of the board:")
-                            #self.show_state(main.spacingBetweenLetters)
+                            print("\nThe winning state of the board:")
+                            self.show_state(spacingBetweenLetters)
                         sys.exit()
             #Do a counter for how many chips in a row
             #1 chip -> counter = 1
@@ -198,7 +221,7 @@ class ConnectFour:
             # Next chip different color -> counter = 1
 
 
-    def check_win_horizontal(self):
+    def check_win_horizontal(self, spacingBetweenLetters):
         """
         Checks if a win occurred horizontally
         """
@@ -207,10 +230,12 @@ class ConnectFour:
             pass
         else:
             print(str(person_that_won[0].upper()) + str(person_that_won[1:]) + ' won!')
+            print("\nThe winning state of the board:")
+            self.show_state(spacingBetweenLetters)
             sys.exit()
 
 
-    def check_win_diagonally(self):
+    def check_win_diagonally(self, spacingBetweenLetters):
         """
         This check win method starts at the top left chip and goes to the right, with every diagonal it checks
         having a positive slope
@@ -246,8 +271,8 @@ class ConnectFour:
             pass
         else:
             print(str(person_that_won[0].upper()) + str(person_that_won[1:]) + ' won!')
-            #print("\nThe winning state of the board:")
-            #self.show_state(main.spacingBetweenLetters)
+            print("\nThe winning state of the board:")
+            self.show_state(spacingBetweenLetters)
             sys.exit()
 
 
@@ -287,4 +312,12 @@ class ConnectFour:
 
 
 class ColumnFullError(Exception):
+    pass
+class RowLengthError(Exception):
+    pass
+class RowTypeError(Exception):
+    pass
+class ColumnLengthError(Exception):
+    pass
+class ColumnTypeError(Exception):
     pass
