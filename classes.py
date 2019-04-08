@@ -1,5 +1,6 @@
 import string
 import sys
+import numpy as np
 
 
 class Chip:
@@ -35,8 +36,19 @@ class ConnectFour:
         self.columns = cols
         self.number_of_turns = 0
         self.listPlayers = [player_1, player_2]
-
         self.ColumFullError = 'Cannot put chip in a full column!'
+
+        #self.RowError = RowError()
+        #self.ColumnError = ColumnError()
+        #self.RowLengthErrorMSG = 'Invalid Row Length. Try a Number Greater Than 0!'
+        #self.ColumnLengthErrorMSG = 'Invalid Row Length. Try a Number Greater Than 0!'
+
+        #if self.rows <= 0:
+        #    print('Invalid row length!')
+        #if type(self.rows) != int:
+        #    raise
+        #if self.columns <= 0:
+
 
         self.board = {}
         self.letters_to_index = {}
@@ -140,6 +152,7 @@ class ConnectFour:
         Checks if there are 4 chips in a row
         Vertically
         """
+        #import main
         chips = ''
         if self.number_of_turns % 2 == 0:
             player = self.player_1
@@ -171,9 +184,13 @@ class ConnectFour:
                         if chip_color == self.listPlayers[0].color:
                             name = self.listPlayers[0].name
                             print(str(name[0].upper()) + str(name[1:]) + ' won!')
+                            #print("\nThe winning state of the board:")
+                            #self.show_state(main.spacingBetweenLetters)
                         else:
                             name = self.listPlayers[1].name
                             print(str(name[0].upper()) + str(name[1:]) + ' won!')
+                            #print("\nThe winning state of the board:")
+                            #self.show_state(main.spacingBetweenLetters)
                         sys.exit()
             #Do a counter for how many chips in a row
             #1 chip -> counter = 1
@@ -183,10 +200,62 @@ class ConnectFour:
 
     def check_win_horizontal(self):
         """
-        Checks if a win occurred
-        Horizontally
+        Checks if a win occurred horizontally
         """
-        for row in self.board_list:
+        person_that_won = self.loop_and_use_counter(self.board_list)
+        if person_that_won == None:
+            pass
+        else:
+            print(str(person_that_won[0].upper()) + str(person_that_won[1:]) + ' won!')
+            sys.exit()
+
+
+    def check_win_diagonally(self):
+        """
+        This check win method starts at the top left chip and goes to the right, with every diagonal it checks
+        having a positive slope
+
+        [ = start
+        ] = end
+        c = chip
+
+        [c] c] c] c]
+        [c  c  c  c]
+        [c  c  c  c]
+        [c [c [c [c]
+        """
+        #import main
+        array = np.array(self.board_list)
+
+        #This vertically mirrors the original array so the wanted diagonals are
+        # lower-right-to-uppper-left.
+        diagonals = [array[::-1,:].diagonal(i) for i in range(-array.shape[0]+1,array.shape[1])]
+
+        # Opposite of the line above
+        diagonals.extend(array.diagonal(i) for i in range(array.shape[1]-1,-array.shape[0],-1))
+
+        #Converts back to Python lists from numpy arrays
+        for n in diagonals:
+            n = n.tolist()
+
+        #Loops over and uses a counter to check if there are 4 in a row
+        #After it calls the method, if it returns a name, it prints the player that won
+        #Else, it doesn't do anything and lets the two players return to playing the game
+        person_that_won = self.loop_and_use_counter(diagonals)
+        if person_that_won == None:
+            pass
+        else:
+            print(str(person_that_won[0].upper()) + str(person_that_won[1:]) + ' won!')
+            #print("\nThe winning state of the board:")
+            #self.show_state(main.spacingBetweenLetters)
+            sys.exit()
+
+
+    def loop_and_use_counter(self, two_dimensional_list):
+        """
+        Loops over and uses a counter to check if there are 4 in a row
+        """
+        for row in two_dimensional_list:
             counter = 0
             #If the len of the row is less than 4, it won't bother
             #Even checking if there are 4 colors in a row
@@ -211,11 +280,10 @@ class ConnectFour:
                         #Determines which player won
                         if chip_color == self.listPlayers[0].color:
                             name = self.listPlayers[0].name
-                            print(str(name[0].upper()) + str(name[1:]) + ' won!')
+                            return name
                         else:
                             name = self.listPlayers[1].name
-                            print(str(name[0].upper()) + str(name[1:]) + ' won!')
-                        sys.exit()
+                            return name
 
 
 class ColumnFullError(Exception):
